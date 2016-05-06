@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle node-requirer",
+        "command": "node-requirer:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "node-requirer",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "node-requirer:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

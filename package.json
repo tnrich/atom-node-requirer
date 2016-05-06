@@ -1,0 +1,19 @@
+{
+	"name": "node-requirer",
+	"version": "0.0.0",
+	"description": "A short description of your package",
+	"keywords": [],
+	"license": "MIT",
+	"main": "./lib/node-requirer",
+	"repository": {},
+	"dependencies": {
+		"filehound": "^1.7.0",
+		"node-dir": "^0.1.12"
+	},
+	"engines": {
+		"atom": ">=1.0.0 <2.0.0"
+	},
+	"activationCommands": {
+		"atom-workspace": "node-requirer:toggle"
+	}
+}
