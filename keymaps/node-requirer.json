@@ -1,5 +1,5 @@
 {
   "atom-workspace": {
-    "ctrl-alt-o": "node-requirer:toggle"
+    "ctrl-shift-i": "node-requirer:toggle"
   }
 }
