@@ -1,8 +1,13 @@
 {
   "name": "node-requirer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Node-requirer lets you quickly add require/import statements to any files/node_modules within your code!",
-  "keywords": ["atom","node","require","import"],
+  "keywords": [
+    "atom",
+    "node",
+    "require",
+    "import"
+  ],
   "license": "MIT",
   "main": "./lib/main",
   "repository": "https://github.com/tnrich/atom-node-requirer",
@@ -30,6 +35,9 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "activationCommands": {
-    "atom-workspace": ["node-requirer:require","node-requirer:import"]
+    "atom-workspace": [
+      "node-requirer:require",
+      "node-requirer:import"
+    ]
   }
 }
