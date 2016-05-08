@@ -1,5 +1,6 @@
 # node-requirer package
 
-A short description of your package.
+Node-requirer lets you quickly add require/import statements to any files/node_modules within your code!
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+
+![nodereqtake1](https://cloud.githubusercontent.com/assets/2730609/15100017/64f52e28-151b-11e6-8f4a-919456864341.gif)
