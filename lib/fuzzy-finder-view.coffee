@@ -1,4 +1,6 @@
-moduleName = require 'filename-to-module-name';
+pathExists = require 'path-exists'
+camelcase = require 'camelcase'
+moduleName = require 'filename-to-module-name'
 path = require 'path'
 relative = require 'relative'
 {Point, CompositeDisposable} = require 'atom'
@@ -130,18 +132,17 @@ class FuzzyFinderView extends SelectListView
         @div class: 'secondary-line path no-icon', -> highlighter(projectRelativePath, matches, 0)
 
   openPath: (filePath, lineNumber, openOptions) ->
-    console.log('filePath',filePath)
-    console.log('__dirname',__dirname)
-    console.log('process.cwd()',process.cwd())
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
-    relativePath = relative(currentEditorPath, filePath);
-    name = moduleName(filePath)
+    if pathExists.sync(filePath)
+      relativePath = relative(currentEditorPath, filePath);
+      name = moduleName(filePath)
+    else 
+      # the path is actually just the name of an npm package
+      name = camelcase(filePath)
+      relativePath = filePath
+
     editor.insertText("import " + name + " from "+ "'" + relativePath + "'")
-    console.log('lineNumber',lineNumber)
-    console.log('openOptions',openOptions)
-    # if filePath
-    #   atom.workspace.open(filePath, openOptions).then => @moveToLine(lineNumber)
 
   moveToLine: (lineNumber=-1) ->
     return unless lineNumber >= 0

@@ -1,6 +1,7 @@
 async = require 'async'
 fs = require 'fs'
 path = require 'path'
+atom = require 'atom'
 _ = require 'underscore-plus'
 {GitRepository} = require 'atom'
 {Minimatch} = require 'minimatch'
@@ -10,8 +11,12 @@ PathsChunkSize = 100
 emittedPaths = new Set
 
 class PathLoader
-  constructor: (@rootPath, ignoreVcsIgnores, @traverseSymlinkDirectories, @ignoredNames) ->
+  constructor: (@rootPath, ignoreVcsIgnores, @traverseSymlinkDirectories, @ignoredNames, @nodeModulesPaths) ->
+    
     @paths = []
+    console.log(@nodeModulesPaths)
+    for nodeModulePath in @nodeModulesPaths 
+      @paths = @paths.concat(fs.readdirSync(nodeModulePath))
     @realPathCache = {}
     @repo = null
     if ignoreVcsIgnores
@@ -86,14 +91,15 @@ class PathLoader
       else
         done(realPath.search(@rootPath) is 0)
 
-module.exports = (rootPaths, followSymlinks, ignoreVcsIgnores, ignores=[]) ->
+module.exports = (rootPaths, followSymlinks, ignoreVcsIgnores, nodeModulesPaths, ignores=[]) ->
   ignoredNames = []
   for ignore in ignores when ignore
     try
       ignoredNames.push(new Minimatch(ignore, matchBase: true, dot: true))
     catch error
       console.warn "Error parsing ignore pattern (#{ignore}): #{error.message}"
-
+  
+  console.log('nodeModulesPaths',nodeModulesPaths)
   async.each(
     rootPaths,
     (rootPath, next) ->
@@ -101,7 +107,8 @@ module.exports = (rootPaths, followSymlinks, ignoreVcsIgnores, ignores=[]) ->
         rootPath,
         ignoreVcsIgnores,
         followSymlinks,
-        ignoredNames
+        ignoredNames,
+        nodeModulesPaths
       ).load(next)
     @async()
   )

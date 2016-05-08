@@ -1,3 +1,4 @@
+findNodeModules = require 'find-node-modules'
 fs = require 'fs-plus'
 {Task} = require 'atom'
 
@@ -10,12 +11,19 @@ module.exports =
     ignoredNames = ignoredNames.concat(atom.config.get('core.ignoredNames') ? [])
     ignoreVcsIgnores = atom.config.get('core.excludeVcsIgnoredPaths')
     projectPaths = atom.project.getPaths().map((path) => fs.realpathSync(path))
-
+    editor = atom.workspace.getActiveTextEditor()
+    currentEditorPath = editor.getPath()
+    
+    nodeModulesPaths = findNodeModules({ cwd: currentEditorPath, relative: false });
+    console.log('nodeModulesPaths', nodeModulesPaths)
+    # debugger
+    
     task = Task.once(
       taskPath,
       projectPaths,
       followSymlinks,
       ignoreVcsIgnores,
+      nodeModulesPaths,
       ignoredNames, ->
         callback(results)
     )
