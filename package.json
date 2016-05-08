@@ -30,6 +30,6 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "activationCommands": {
-    "atom-workspace": "node-requirer:toggle"
+    "atom-workspace": ["node-requirer:require","node-requirer:import"]
   }
 }

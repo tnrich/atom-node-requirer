@@ -2,14 +2,10 @@ module.exports =
   activate: (state) ->
     @active = true
     atom.commands.add 'atom-workspace',
-      'node-requirer:toggle': =>
+      'node-requirer:require': =>
+        @createProjectView(true).toggle(true)
+      'node-requirer:import': =>
         @createProjectView().toggle()
-      # 'fuzzy-finder:toggle-file-finder': =>
-      #   @createProjectView().toggle()
-      # 'fuzzy-finder:toggle-buffer-finder': =>
-      #   @createBufferView().toggle()
-      # 'fuzzy-finder:toggle-git-status-finder': =>
-      #   @createGitStatusView().toggle()
 
     process.nextTick => @startLoadPathsTask()
 
@@ -40,12 +36,12 @@ module.exports =
       paths[path] = editor.lastOpened if path?
     paths
 
-  createProjectView: ->
+  createProjectView: (useOldRequireSyntax) ->
     @stopLoadPathsTask()
 
     unless @projectView?
       ProjectView  = require './project-view'
-      @projectView = new ProjectView(@projectPaths)
+      @projectView = new ProjectView(@projectPaths, useOldRequireSyntax)
       @projectPaths = null
     @projectView
 

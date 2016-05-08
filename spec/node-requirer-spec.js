@@ -1,5 +1,4 @@
 'use babel';
-
 import NodeRequirer from '../lib/node-requirer';
 
 // Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.

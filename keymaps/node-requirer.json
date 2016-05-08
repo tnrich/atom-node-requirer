@@ -1,5 +1,6 @@
 {
   "atom-workspace": {
-    "ctrl-shift-i": "node-requirer:toggle"
+    "ctrl-shift-i": "node-requirer:import",
+    "ctrl-alt-shift-i": "node-requirer:require"
   }
 }

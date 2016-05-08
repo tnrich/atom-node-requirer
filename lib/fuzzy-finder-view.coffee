@@ -16,8 +16,9 @@ class FuzzyFinderView extends SelectListView
   projectRelativePaths: null
   subscriptions: null
   alternateScoring: false
+  useOldRequireSyntax: false
 
-  initialize: ->
+  initialize: (@paths, @useOldRequireSyntax) ->
     super
 
     @addClass('fuzzy-finder')
@@ -67,7 +68,10 @@ class FuzzyFinderView extends SelectListView
     @panel?.destroy()
     @subscriptions?.dispose()
     @subscriptions = null
-
+    
+  setUseOldRequireSyntax: (val) ->
+    @useOldRequireSyntax = val
+    
   viewForItem: ({filePath, projectRelativePath}) ->
     # Style matched characters in search results
     filterQuery = @getFilterQuery()
@@ -135,14 +139,16 @@ class FuzzyFinderView extends SelectListView
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
     if pathExists.sync(filePath)
-      relativePath = relative(currentEditorPath, filePath);
+      relativePath = relative(currentEditorPath, filePath)
       name = moduleName(filePath)
     else 
       # the path is actually just the name of an npm package
       name = camelcase(filePath)
       relativePath = filePath
-
-    editor.insertText("import " + name + " from "+ "'" + relativePath + "'")
+    if @useOldRequireSyntax
+      editor.insertText("var " + name + " = require("+ "'" + relativePath + "')")
+    else 
+      editor.insertText("import " + name + " from "+ "'" + relativePath + "'")
 
   moveToLine: (lineNumber=-1) ->
     return unless lineNumber >= 0

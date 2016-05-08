@@ -46,8 +46,8 @@ class ProjectView extends FuzzyFinderView
 
     @disposables.add atom.config.onDidChange 'core.excludeVcsIgnoredPaths', =>
       @reloadPaths = true
-
-  toggle: ->
+  toggle: (@useOldRequireSyntax) ->
+    @setUseOldRequireSyntax(@useOldRequireSyntax)
     if @panel?.isVisible()
       @cancel()
     else

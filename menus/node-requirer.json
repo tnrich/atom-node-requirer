@@ -2,8 +2,12 @@
   "context-menu": {
     "atom-text-editor": [
       {
-        "label": "Toggle node-requirer",
-        "command": "node-requirer:toggle"
+        "label": "Require a file/module using node-requirer",
+        "command": "node-requirer:require"
+      },
+      {
+        "label": "Import a file/module using node-requirer",
+        "command": "node-requirer:import"
       }
     ]
   },
@@ -15,8 +19,12 @@
           "label": "node-requirer",
           "submenu": [
             {
-              "label": "Toggle",
-              "command": "node-requirer:toggle"
+              "label": "Require",
+              "command": "node-requirer:require"
+            },
+            {
+              "label": "Import",
+              "command": "node-requirer:import"
             }
           ]
         }
