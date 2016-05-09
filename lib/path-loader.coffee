@@ -13,11 +13,10 @@ module.exports =
     projectPaths = atom.project.getPaths().map((path) => fs.realpathSync(path))
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
-    
+    # get all paths to node_modules folders above the current file path
     nodeModulesPaths = findNodeModules({ cwd: currentEditorPath, relative: false });
     console.log('nodeModulesPaths', nodeModulesPaths)
-    # debugger
-    
+    # start a task (a separate node process so the UI isn't blocked)
     task = Task.once(
       taskPath,
       projectPaths,

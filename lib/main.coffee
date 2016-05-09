@@ -45,18 +45,6 @@ module.exports =
       @projectPaths = null
     @projectView
 
-  # createGitStatusView: ->
-  #   unless @gitStatusView?
-  #     GitStatusView  = require './git-status-view'
-  #     @gitStatusView = new GitStatusView()
-  #   @gitStatusView
-  # 
-  # createBufferView: ->
-  #   unless @bufferView?
-  #     BufferView = require './buffer-view'
-  #     @bufferView = new BufferView()
-  #   @bufferView
-
   startLoadPathsTask: ->
     @stopLoadPathsTask()
 
