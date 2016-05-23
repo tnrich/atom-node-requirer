@@ -139,10 +139,16 @@ class FuzzyFinderView extends SelectListView
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
     if (pathExists.sync(filePath))
+      # the file is defined locally (not an npm module)
       relativePath = relative(currentEditorPath, filePath)
       if relativePath[0] != '.'
         relativePath = './' + relativePath
-      name = moduleName(filePath)
+      if relativePath.endsWith('/index.js')
+        relativePath = relativePath.slice(0,-'/index.js'.length)
+      if relativePath.endsWith('.js')
+        relativePath = relativePath.slice(0,-'.js'.length)
+      name =  relativePath.slice(relativePath.lastIndexOf('/')+1)
+      # name = moduleName(filePath)
     else 
       # the path is actually just the name of an npm package
       name = camelcase(filePath)
