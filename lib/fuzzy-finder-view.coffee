@@ -49,7 +49,32 @@ class FuzzyFinderView extends SelectListView
     @alternateScoring = atom.config.get 'fuzzy-finder.useAlternateScoring'
     @subscriptions.add atom.config.onDidChange 'fuzzy-finder.useAlternateScoring', ({newValue}) => @alternateScoring = newValue
 
-
+  openPath: (filePath, lineNumber, openOptions) ->
+    editor = atom.workspace.getActiveTextEditor()
+    currentEditorPath = editor.getPath()
+    if (pathExists.sync(filePath))
+      # the file is defined locally (not an npm module)
+      relativePath = relative(currentEditorPath, filePath)
+      if relativePath[0] != '.'
+        relativePath = './' + relativePath
+      if relativePath.endsWith('/index.js')
+        relativePath = relativePath.slice(0,-'/index.js'.length)
+      if relativePath.endsWith('.js')
+        relativePath = relativePath.slice(0,-'.js'.length)
+      name = relativePath.slice(relativePath.lastIndexOf('/')+1)
+      if name.endsWith('.json')
+        name = name.slice(0,-'.json'.length)
+      name = camelcase(name)
+      # name = moduleName(filePath)
+    else 
+      # the path is actually just the name of an npm package
+      name = camelcase(filePath)
+      relativePath = filePath
+    if @useOldRequireSyntax
+      editor.insertText("var " + name + " = require("+ "'" + relativePath + "')")
+    else 
+      editor.insertText("import " + name + " from "+ "'" + relativePath + "'")
+        
   getFilterKey: ->
     'projectRelativePath'
 
@@ -135,28 +160,6 @@ class FuzzyFinderView extends SelectListView
         @div class: "primary-line file icon #{typeClass}", 'data-name': fileBasename, 'data-path': projectRelativePath, -> highlighter(fileBasename, matches, baseOffset)
         @div class: 'secondary-line path no-icon', -> highlighter(projectRelativePath, matches, 0)
 
-  openPath: (filePath, lineNumber, openOptions) ->
-    editor = atom.workspace.getActiveTextEditor()
-    currentEditorPath = editor.getPath()
-    if (pathExists.sync(filePath))
-      # the file is defined locally (not an npm module)
-      relativePath = relative(currentEditorPath, filePath)
-      if relativePath[0] != '.'
-        relativePath = './' + relativePath
-      if relativePath.endsWith('/index.js')
-        relativePath = relativePath.slice(0,-'/index.js'.length)
-      if relativePath.endsWith('.js')
-        relativePath = relativePath.slice(0,-'.js'.length)
-      name =  relativePath.slice(relativePath.lastIndexOf('/')+1)
-      # name = moduleName(filePath)
-    else 
-      # the path is actually just the name of an npm package
-      name = camelcase(filePath)
-      relativePath = filePath
-    if @useOldRequireSyntax
-      editor.insertText("var " + name + " = require("+ "'" + relativePath + "')")
-    else 
-      editor.insertText("import " + name + " from "+ "'" + relativePath + "'")
 
   moveToLine: (lineNumber=-1) ->
     return unless lineNumber >= 0

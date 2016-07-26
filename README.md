@@ -8,7 +8,8 @@ Node-requirer lets you quickly add require/import statements to any files/node_m
 
 Developing:
 ```
-git clone this repo
+apm develop node-requirer
 cd into repo
 atom -d .
 ```
+Most of the final formatting occurs in the "openPath" method within fuzzy-finder-view.coffee.
