@@ -68,16 +68,19 @@ class FuzzyFinderView extends SelectListView
       # name = moduleName(filePath)
     else 
       # the path is actually just the name of an npm package
-      name = camelcase(filePath)
+      name = filePath
       aliasList = atom.config.get('node-requirer.aliasList')
       aliases = {}
       try 
         aliases = JSON.parse(aliasList)
       catch e
         atom.notifications.addError('Error in node-requirer alias list. Make sure you are using valid :' + e.toString(), {dismissable: true})
-      # console.log('aliases:',aliases)
+        # console.log('aliases:',aliases)
       if aliases[name]
         name = aliases[name]
+      else
+        name = camelcase(name)
+      
       relativePath = filePath
     if @useOldRequireSyntax
       editor.insertText("var " + name + " = require("+ "'" + relativePath + "')")
