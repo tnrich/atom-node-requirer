@@ -13,7 +13,8 @@ cd ~/github/node-requirer
 atom -d .
 
 git commit -a -m 'checking everything in'
-bump package.json
-apm publish
+apm publish --tag v0.1.5 patch
+apm publish --tag v0.2.5 minor
+apm publish --tag v1.0.0 major
 ```
 Most of the final formatting occurs in the "openPath" method within fuzzy-finder-view.coffee.
