@@ -9,7 +9,11 @@ Node-requirer lets you quickly add require/import statements to any files/node_m
 Developing:
 ```
 apm develop node-requirer
-cd into repo
+cd ~/github/node-requirer
 atom -d .
+
+git commit -a -m 'checking everything in'
+bump package.json
+apm publish
 ```
 Most of the final formatting occurs in the "openPath" method within fuzzy-finder-view.coffee.

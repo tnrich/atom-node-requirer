@@ -28,6 +28,13 @@ module.exports =
     @projectPaths = null
     @stopLoadPathsTask()
     @active = false
+    
+  config:
+    aliasList:
+      title: 'Alias list',
+      description: 'A list of alias to use for .',
+      type: 'string',
+      default: '{"lodash": "_","async":"a"}',
 
   serialize: ->
     paths = {}

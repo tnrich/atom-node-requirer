@@ -10,12 +10,11 @@ module.exports =
     ignoredNames = atom.config.get('fuzzy-finder.ignoredNames') ? []
     ignoredNames = ignoredNames.concat(atom.config.get('core.ignoredNames') ? [])
     ignoreVcsIgnores = atom.config.get('core.excludeVcsIgnoredPaths')
-    projectPaths = atom.project.getPaths().map((path) => fs.realpathSync(path))
+    projectPaths = atom.project.getPaths().map((path) -> fs.realpathSync(path))
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
     # get all paths to node_modules folders above the current file path
-    nodeModulesPaths = findNodeModules({ cwd: currentEditorPath, relative: false });
-    console.log('nodeModulesPaths', nodeModulesPaths)
+    nodeModulesPaths = findNodeModules({ cwd: currentEditorPath, relative: false })
     # start a task (a separate node process so the UI isn't blocked)
     task = Task.once(
       taskPath,

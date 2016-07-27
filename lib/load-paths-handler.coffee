@@ -14,7 +14,6 @@ class PathLoader
   constructor: (@rootPath, ignoreVcsIgnores, @traverseSymlinkDirectories, @ignoredNames, @nodeModulesPaths) ->
     
     @paths = []
-    console.log(@nodeModulesPaths)
     for nodeModulePath in @nodeModulesPaths 
       @paths = @paths.concat(fs.readdirSync(nodeModulePath))
     @realPathCache = {}
@@ -99,7 +98,6 @@ module.exports = (rootPaths, followSymlinks, ignoreVcsIgnores, nodeModulesPaths,
     catch error
       console.warn "Error parsing ignore pattern (#{ignore}): #{error.message}"
   
-  console.log('nodeModulesPaths',nodeModulesPaths)
   async.each(
     rootPaths,
     (rootPath, next) ->
