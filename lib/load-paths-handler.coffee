@@ -1,3 +1,4 @@
+walkSync = require 'walk-sync'
 async = require 'async'
 fs = require 'fs'
 path = require 'path'
@@ -12,10 +13,7 @@ emittedPaths = new Set
 
 class PathLoader
   constructor: (@rootPath, ignoreVcsIgnores, @traverseSymlinkDirectories, @ignoredNames, @nodeModulesPaths) ->
-    
     @paths = []
-    for nodeModulePath in @nodeModulesPaths 
-      @paths = @paths.concat(fs.readdirSync(nodeModulePath))
     @realPathCache = {}
     @repo = null
     if ignoreVcsIgnores
@@ -23,6 +21,29 @@ class PathLoader
       @repo = repo if repo?.relativize(path.join(@rootPath, 'test')) is 'test'
 
   load: (done) ->
+    nativeNodeModules = ['assert', 'buffer', 'child_process', 'console', 'constants', 'crypto', 'cluster', 'dgram', 'dns', 'domain', 'events', 'freelist', 'fs', 'http', 'https', 'module', 'net', 'os', 'path', 'process', 'punycode', 'querystring', 'readline', 'repl', 'stream', 'string_decoder', 'sys', 'timers', 'tls', 'tty', 'url', 'util', 'v8', 'vm', 'zlib']
+    ignoredNamePatterns = @ignoredNames.map((ignoredName)->
+      return ignoredName.pattern
+    )
+    ignoredNamePatterns.push('node_modules')
+    
+    @paths = @paths.concat(nativeNodeModules)
+    for nodeModulePath in @nodeModulesPaths 
+      nodeModules = fs.readdirSync(nodeModulePath)
+      @paths = @paths.concat(nodeModules)
+      for moduleName in nodeModules 
+        try 
+          subprojpath = path.join(nodeModulePath, moduleName)
+          # subfiles = fs.readdirSync()
+          subPaths = walkSync(subprojpath, { globs: ['**/*.js'], directories: false, ignore: ignoredNamePatterns})
+          fullSubPaths = subPaths.map((subPath)->
+            indexLocation = subPath.indexOf('index.js')
+            if indexLocation != -1 
+              subPath = subPath.slice(0, indexLocation)  
+            return path.join(moduleName, subPath))
+          @paths = @paths.concat(fullSubPaths)
+        catch e
+          console.warn(e)
     @loadPath @rootPath, true, =>
       @flushPaths()
       @repo?.destroy()

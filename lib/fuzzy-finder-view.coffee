@@ -64,7 +64,11 @@ class FuzzyFinderView extends SelectListView
       name = relativePath.slice(relativePath.lastIndexOf('/')+1)
       if name.endsWith('.json')
         name = name.slice(0,-'.json'.length)
+      first = name.charAt(0)
+      startsWithUpperCase = first == first.toUpperCase()
       name = camelcase(name)
+      if startsWithUpperCase
+        name = name.charAt(0).toUpperCase() + name.slice(1)
       # name = moduleName(filePath)
     else 
       # the path is actually just the name of an npm package
