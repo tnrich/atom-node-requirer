@@ -1,6 +1,6 @@
 {
   "name": "node-requirer",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Node-requirer lets you quickly add require/import statements to any files/node_modules within your code!",
   "keywords": [
     "atom",
