@@ -15,6 +15,8 @@ apm develop node-requirer
 cd ~/github/node-requirer
 atom -d .
 
+update the changelog
+
 git commit -a -m 'checking everything in'
 apm publish --tag v0.1.5 patch
 apm publish --tag v0.2.5 minor
