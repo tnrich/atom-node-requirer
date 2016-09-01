@@ -49,43 +49,55 @@ class FuzzyFinderView extends SelectListView
     @alternateScoring = atom.config.get 'fuzzy-finder.useAlternateScoring'
     @subscriptions.add atom.config.onDidChange 'fuzzy-finder.useAlternateScoring', ({newValue}) => @alternateScoring = newValue
 
+  prettifyPath: (filePath) -> 
+    if filePath[0] != '.'
+      filePath = './' + filePath
+    if filePath.endsWith('/index.js')
+      filePath = filePath.slice(0,-'/index.js'.length)
+    if filePath.endsWith('.js')
+      filePath = filePath.slice(0,-'.js'.length)
+    if filePath = '.'
+      filePath = './index'
+    return filePath
+  getNameFromFilePath: (filePath) -> 
+    name = filePath.slice(filePath.lastIndexOf('/')+1)
+    if name.endsWith('.json')
+      name = name.slice(0,-'.json'.length)
+    first = name.charAt(0)
+    startsWithUpperCase = first == first.toUpperCase()
+    name = camelcase(name)
+    if startsWithUpperCase
+      name = name.charAt(0).toUpperCase() + name.slice(1)
+    return name
+  getAliases: ()->
+    aliasList = atom.config.get('node-requirer.aliasList')
+    aliases = {}
+    try 
+      aliases = JSON.parse(aliasList)
+    catch e
+      atom.notifications.addError('Error in node-requirer alias list. Make sure you are using valid :' + e.toString(), {dismissable: true})
+      # console.log('aliases:',aliases)
+    return aliases
+    
+  
   openPath: (filePath, lineNumber, openOptions) ->
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
     if (pathExists.sync(filePath))
       # the file is defined locally (not an npm module)
       relativePath = relative(currentEditorPath, filePath)
-      if relativePath[0] != '.'
-        relativePath = './' + relativePath
-      if relativePath.endsWith('/index.js')
-        relativePath = relativePath.slice(0,-'/index.js'.length)
-      if relativePath.endsWith('.js')
-        relativePath = relativePath.slice(0,-'.js'.length)
-      name = relativePath.slice(relativePath.lastIndexOf('/')+1)
-      if name.endsWith('.json')
-        name = name.slice(0,-'.json'.length)
-      first = name.charAt(0)
-      startsWithUpperCase = first == first.toUpperCase()
-      name = camelcase(name)
-      if startsWithUpperCase
-        name = name.charAt(0).toUpperCase() + name.slice(1)
+      relativePath = @prettifyPath(relativePath)
+      name = @getNameFromFilePath(relativePath)
       # name = moduleName(filePath)
     else 
-      # the path is actually just the name of an npm package
+      # the path is an npm package name or an npm package subpath
       name = filePath
-      aliasList = atom.config.get('node-requirer.aliasList')
-      aliases = {}
-      try 
-        aliases = JSON.parse(aliasList)
-      catch e
-        atom.notifications.addError('Error in node-requirer alias list. Make sure you are using valid :' + e.toString(), {dismissable: true})
-        # console.log('aliases:',aliases)
+      aliases = @getAliases
+      relativePath = @prettifyPath(filePath)
       if aliases[name]
         name = aliases[name]
       else
-        name = camelcase(name)
-      
-      relativePath = filePath
+        name = @getNameFromFilePath(relativePath)
     if @useOldRequireSyntax
       editor.insertText("var " + name + " = require("+ "'" + relativePath + "')")
     else 

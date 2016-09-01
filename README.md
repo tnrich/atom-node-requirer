@@ -7,6 +7,7 @@ Node-requirer lets you quickly add require/import statements to any files/node_m
 
 Changelog:
 0.1.6 - Added alias list. Fixed issue with requiring JSON files.
+0.1.9 - Fixing node module subpath requires. Fixing same foler ./index.js requires.
 
 Developing:
 ```
