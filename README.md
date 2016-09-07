@@ -20,7 +20,7 @@ atom -d .
 update the changelog
 
 git commit -a -m 'checking everything in'
-apm publish --tag v0.1.5 patch
+apm publish --tag v0.1.11 patch
 apm publish --tag v0.2.5 minor
 apm publish --tag v1.0.0 major
 ```
