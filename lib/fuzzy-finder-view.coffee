@@ -50,8 +50,6 @@ class FuzzyFinderView extends SelectListView
     @subscriptions.add atom.config.onDidChange 'fuzzy-finder.useAlternateScoring', ({newValue}) => @alternateScoring = newValue
 
   prettifyPath: (filePath) -> 
-    if filePath[0] != '.'
-      filePath = './' + filePath
     if filePath.endsWith('/index.js')
       filePath = filePath.slice(0,-'/index.js'.length)
     if filePath.endsWith('.js')
@@ -87,6 +85,8 @@ class FuzzyFinderView extends SelectListView
     if (pathExists.sync(filePath))
       # the file is defined locally (not an npm module)
       relativePath = relative(currentEditorPath, filePath)
+      if relativePath[0] != '.'
+        relativePath = './' + relativePath
       relativePath = @prettifyPath(relativePath)
       name = @getNameFromFilePath(relativePath)
       # name = moduleName(filePath)
