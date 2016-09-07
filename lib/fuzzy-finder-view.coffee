@@ -56,7 +56,7 @@ class FuzzyFinderView extends SelectListView
       filePath = filePath.slice(0,-'/index.js'.length)
     if filePath.endsWith('.js')
       filePath = filePath.slice(0,-'.js'.length)
-    if filePath = '.'
+    if filePath == '.'
       filePath = './index'
     return filePath
   getNameFromFilePath: (filePath) -> 
@@ -83,6 +83,7 @@ class FuzzyFinderView extends SelectListView
   openPath: (filePath, lineNumber, openOptions) ->
     editor = atom.workspace.getActiveTextEditor()
     currentEditorPath = editor.getPath()
+    debugger
     if (pathExists.sync(filePath))
       # the file is defined locally (not an npm module)
       relativePath = relative(currentEditorPath, filePath)
