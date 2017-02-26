@@ -35,6 +35,11 @@ module.exports =
       description: 'A list of alias to use for .',
       type: 'string',
       default: '{"lodash": "_","async":"a"}',
+    requireDeclaration:
+      title: 'Require declaration',
+      description: 'Define whether to use `const`, `let` or `var` as the declaration for the `require` statement',
+      type: 'string',
+      default: 'const',
 
   serialize: ->
     paths = {}
