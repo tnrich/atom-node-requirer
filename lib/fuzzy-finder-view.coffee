@@ -92,7 +92,7 @@ class FuzzyFinderView extends SelectListView
     else 
       # the path is an npm package name or an npm package subpath
       name = filePath
-      aliases = @getAliases
+      aliases = @getAliases()
       relativePath = @prettifyPath(filePath)
       if aliases[name]
         name = aliases[name]
