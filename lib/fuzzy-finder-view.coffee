@@ -98,11 +98,15 @@ class FuzzyFinderView extends SelectListView
         name = aliases[name]
       else
         name = @getNameFromFilePath(relativePath)
+
     if @useOldRequireSyntax
       editor.insertText("var " + name + " = require("+ "'" + relativePath + "')")
-    else 
-      editor.insertText("import " + name + " from "+ "'" + relativePath + "'")
-        
+    else
+      textToInsert = atom.config.get('node-requirer.importTemplate')
+                        .replace(/\{name\}/, name)
+                        .replace(/\{path\}/, relativePath)
+      editor.insertText(textToInsert)
+
   getFilterKey: ->
     'projectRelativePath'
 

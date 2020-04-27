@@ -35,6 +35,11 @@ module.exports =
       description: 'A list of alias to use for .',
       type: 'string',
       default: '{"lodash": "_","async":"a"}',
+    importTemplate:
+      title: 'Import Template'
+      description: 'Template to use when importing a module'
+      type: 'string'
+      default: "import {name} from '{path}'"
 
   serialize: ->
     paths = {}
